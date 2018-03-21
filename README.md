@@ -1,3 +1,33 @@
+## Plugin Development
+
+#### Prerequisite
+
+- JDK 8u112+
+- Intellij IDEA (2016.3+)
+- Plugins Enabled: Kotlin
+
+Tech Stack
+
+- Build system: Gradle
+- Language: Kotlin
+- Frameworks: IntelliJ Platform SDK / Java GUI (Swing)
+
+#### Build / Run
+
+```
+# run in sandbox
+gradle clean runIde
+
+# build artifact
+gradle clean buildPlugin
+```
+
+> Advanced Debug: Add Custom VM Options to Intellij IDEA
+> - `readhub.httpHeader.userAgent`: Use custom UA for HTTPClient
+> - `readhub.is.internal`: Turn on detailed logging
+
+----
+
 ## 关于插件
 
 在 IDE 中快捷查阅科技动态、招聘信息等 [Readhub](https://readhub.me) 资讯，有效利用日常工作碎片时间，功能包含：
@@ -22,13 +52,13 @@
 下载插件 Zip 包：
 
 - 方案1：在 [Releases](https://github.com/roger-yh99/Readhub/releases) 页面选择最新的 Zip 包（Readhub-1.x.x.zip）进行下载
-- 方案2：前往 JetBrains [官方仓库](http://plugins.jetbrains.com/plugin/10539-readhub) 页面，Download Plugin 处选择 `Release` 并点击 Download 下载插件 Zip 包
+- 方案2：前往 JetBrains [官方仓库](http://plugins.jetbrains.com/plugin/10539-readhub) 页面，Download Plugin 处下载插件 Zip 包
 
-下载完成后，IDE 中 `Preferences` => `Plugins` => `Install plugin from disk...`，点选已下载的 Zip 包进行安装，依照提示重启 IDE 生效
+下载完成后，IDE 中 `Preferences` (Windows 下为 Settings) => `Plugins` => `Install plugin from disk...`，点选已下载的 Zip 包进行安装，依照提示重启 IDE 生效
 
 ### 安装方法2：通过官方仓库在 IDE 中进行安装（推荐）
 
-- IDE 中打开 `Preferences` => `Plugins` => `Browse repositories...`
+- IDE 中打开 `Preferences` (Windows 下为 Settings) => `Plugins` => `Browse repositories...`
 - 搜索框输入 Readhub 查找插件，点击 `Install` 进行安装，安装完成后依提示重启 IDE 生效
 
 ## FAQ
@@ -37,7 +67,7 @@
 
 修改字体：`Appearance & Behavior` => `Appearance` => `UI Options` -> `Name` 里设置成中文字体，如 微软雅黑（microsoft yahei light）、文泉驿（linux）
 
-![](https://gw.alicdn.com/tfscom/TB14wTmm3oQMeJjy0FoXXcShVXa.png) 
+![](https://gw.alicdn.com/tfscom/TB14wTmm3oQMeJjy0FoXXcShVXa.png)
 
 ## Thanks
 

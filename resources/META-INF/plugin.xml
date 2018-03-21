@@ -1,0 +1,52 @@
+<idea-plugin>
+    <id>com.madfish.ide.readhub</id>
+    <name>ReadHub</name>
+    <idea-version since-build="162.0"/>
+    <vendor email="alex.yh99@gmail.com" url="https://github.com/roger-yh99">Roger</vendor>
+
+    <description><![CDATA[
+      <b>Readhub IDE 插件</b> - 每天高效浏览行业资讯<br/>
+      <i>Readhub is a News Reader application mainly for Chinese articles</i>
+      <ul>
+          <li>在 IDE 中快捷查阅科技动态、招聘信息等资讯，有效利用日常工作碎片时间</li>
+          <li>更多介绍，请访问：<a href="https://readhub.me">Readhub</a> | <a href="https://github.com/roger-yh99/Readhub">GitHub</a> | <a href="https://github.com/roger-yh99/Readhub/issues/new">Issues</a></li>
+      </ul>
+    ]]></description>
+
+    <change-notes><![CDATA[
+      <p>1.0.1</p>
+      <ul>
+          <li>支持语言切换 ( <i>Enable Language switch in Plugin settings</i> )</li>
+      </ul>
+      <p>1.0.0</p>
+      <ul>
+          <li>展示 Readhub 各板块资讯及摘要信息</li>
+          <li>支持PC本地浏览器访问资讯内容源站</li>
+          <li>资讯条目支持 已读 / 未读 状态</li>
+          <li>支持自动刷新、本地缓存清理、本地搜索过滤等功能</li>
+          <li>支持资讯分享</li>
+      </ul>
+    ]]>
+    </change-notes>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <toolWindow id="Readhub" icon="/images/readhubToolWindow.png" anchor="bottom" factoryClass="com.madfish.ide.view.RHToolWindow"/>
+        <errorHandler implementation="com.madfish.ide.internal.RHErrorReportSubmitter"/>
+        <applicationService serviceImplementation="com.madfish.ide.configurable.RHData"/>
+        <applicationService serviceImplementation="com.madfish.ide.configurable.RHSettings"/>
+        <applicationConfigurable id="Readhub.Configurable" provider="com.madfish.ide.configurable.RHConfigurableProvider"/>
+    </extensions>
+
+    <application-components>
+        <component>
+            <implementation-class>com.madfish.ide.component.RHAppComponent</implementation-class>
+        </component>
+    </application-components>
+
+    <actions>
+        <group id="Readhub.Toolbar"/>
+    </actions>
+
+</idea-plugin>
