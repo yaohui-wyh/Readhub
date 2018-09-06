@@ -31,12 +31,12 @@ class RHTopicWindowContent(project: Project) : RHToolWindowContent(project, RHCa
                     val itemPanel = JPanel(HorizontalLayout(5))
                     val label = HyperlinkLabel(news[0].title, UIUtil.getLabelForeground(), UIUtil.getLabelBackground(), UIUtil.getLabelForeground())
                     label.font = JBUI.Fonts.smallFont()
-                    label.addHyperlinkListener { news[0].url?.let { BrowserUtil.browse(it) } }
+                    label.addHyperlinkListener { news[0].url?.let { url -> BrowserUtil.browse(url) } }
                     itemPanel.add(label)
                     itemPanel.background = background
                     news.forEach { item ->
                         val siteLabel = HyperlinkLabel(item.siteName)
-                        siteLabel.addHyperlinkListener { item.url?.let { BrowserUtil.browse(it) } }
+                        siteLabel.addHyperlinkListener { item.url?.let { url -> BrowserUtil.browse(url) } }
                         siteLabel.font = JBUI.Fonts.smallFont().deriveFont(Font.BOLD)
                         itemPanel.add(siteLabel)
                         if (item != news.last()) {

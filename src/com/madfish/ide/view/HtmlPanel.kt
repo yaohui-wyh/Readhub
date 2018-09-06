@@ -17,7 +17,7 @@ class HtmlPanel : JEditorPane(UIUtil.HTML_MIME, "") {
         isEditable = false
         isOpaque = false
         putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, true)
-        addHyperlinkListener({ BrowserHyperlinkListener.INSTANCE.hyperlinkUpdate(it) })
+        addHyperlinkListener { BrowserHyperlinkListener.INSTANCE.hyperlinkUpdate(it) }
     }
 
     override fun getSelectedText(): String {

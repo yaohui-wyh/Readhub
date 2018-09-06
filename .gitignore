@@ -1,0 +1,16 @@
+.gradle/
+gradle/
+gradle*
+!gradle.properties
+.idea/
+out/
+build/
+target/
+
+*.swp
+*.swa
+*.iml
+*.zip
+*-dev.md
+
+idea-sandbox/

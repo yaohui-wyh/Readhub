@@ -26,7 +26,6 @@ import com.madfish.ide.messages.READHUB_VIEW_TOPIC
 import com.madfish.ide.messages.TableViewListener
 import com.madfish.ide.model.RHBaseItem
 import com.madfish.ide.model.RHCategory
-import com.madfish.ide.util.Constants
 import com.madfish.ide.util.RHDataKeys
 import com.madfish.ide.util.RHUtil
 import net.miginfocom.swing.MigLayout
@@ -237,14 +236,14 @@ open class RHToolWindowContent(var project: Project, var category: RHCategory) {
     private fun buildTablePane(): JPanel {
         val panel = JPanel(BorderLayout())
         val pane = ScrollPaneFactory.createScrollPane(myTable, SideBorder.TOP)
-        pane.verticalScrollBar.addAdjustmentListener({ e ->
+        pane.verticalScrollBar.addAdjustmentListener { e ->
             val maxOffset = pane.verticalScrollBar.maximum - pane.verticalScrollBar.height
             if (maxOffset > 0 && e.value == maxOffset) {
                 loadMoreBtn.isVisible = true
             } else if (maxOffset - e.value > loadMoreBtn.height * 2) {
                 loadMoreBtn.isVisible = false
             }
-        })
+        }
 
         panel.add(pane, BorderLayout.CENTER)
         panel.add(loadMoreBtn, BorderLayout.SOUTH)

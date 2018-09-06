@@ -1,0 +1,58 @@
+buildscript {
+    repositories {
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+        maven { url "http://dl.bintray.com/jetbrains/intellij-plugin-service" }
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.intellij.plugins:gradle-intellij-plugin:0.2.0-SNAPSHOT"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+    }
+}
+
+apply plugin: "java"
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+sourceSets {
+    main.java.srcDirs "src"
+    main.resources.srcDirs "resources"
+    test.java.srcDirs "test"
+    test.resources.srcDirs "test-resources"
+}
+
+test.ignoreFailures true
+
+apply plugin: "kotlin"
+sourceSets {
+    main.kotlin.srcDirs += "src"
+}
+
+apply plugin: "org.jetbrains.intellij"
+intellij {
+    version ideaVersion
+    pluginName pluginName
+    updateSinceUntilBuild false
+    sandboxDirectory "idea-sandbox"
+}
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+dependencies {
+    compile "com.mashape.unirest:unirest-java:1.4.9",
+            "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
+            "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+}
+
+runIde {
+    systemProperty("readhub.is.internal", true)
+}
+
+group "com.madfish.ide"
+version "$pluginVersion"
+
+wrapper {
+    gradleVersion "4.5"
+}

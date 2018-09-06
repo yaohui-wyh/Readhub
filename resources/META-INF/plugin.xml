@@ -9,11 +9,15 @@
       <i>Readhub is a News Reader application mainly for Chinese articles</i>
       <ul>
           <li>在 IDE 中快捷查阅科技动态、招聘信息等资讯，有效利用日常工作碎片时间</li>
-          <li>更多介绍，请访问：<a href="https://readhub.me">Readhub</a> | <a href="https://github.com/roger-yh99/Readhub">GitHub</a> | <a href="https://github.com/roger-yh99/Readhub/issues/new">Issues</a></li>
+          <li>更多介绍，请访问：<a href="https://readhub.cn">Readhub</a> | <a href="https://github.com/roger-yh99/Readhub">GitHub</a> | <a href="https://github.com/roger-yh99/Readhub/issues/new">Issues</a></li>
       </ul>
     ]]></description>
 
     <change-notes><![CDATA[
+      <p>1.0.2</p>
+      <ul>
+          <li>Readhub host changes to <a>https://readhub.cn</a></li>
+      </ul>
       <p>1.0.1</p>
       <ul>
           <li>支持语言切换 ( <i>Enable Language switch in Plugin settings</i> )</li>
@@ -33,7 +37,6 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <toolWindow id="Readhub" icon="/images/readhubToolWindow.png" anchor="bottom" factoryClass="com.madfish.ide.view.RHToolWindow"/>
-        <errorHandler implementation="com.madfish.ide.internal.RHErrorReportSubmitter"/>
         <applicationService serviceImplementation="com.madfish.ide.configurable.RHData"/>
         <applicationService serviceImplementation="com.madfish.ide.configurable.RHSettings"/>
         <applicationConfigurable id="Readhub.Configurable" provider="com.madfish.ide.configurable.RHConfigurableProvider"/>
