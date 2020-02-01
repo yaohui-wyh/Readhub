@@ -11,13 +11,20 @@ import javax.swing.text.BadLocationException
 /**
  * Created by Roger™
  */
-class HtmlPanel : JEditorPane(UIUtil.HTML_MIME, "") {
+class HtmlPanel(private val scrollable: Boolean = false) : JEditorPane(UIUtil.HTML_MIME, "") {
 
     init {
         isEditable = false
         isOpaque = false
         putClientProperty(JEditorPane.HONOR_DISPLAY_PROPERTIES, true)
         addHyperlinkListener { BrowserHyperlinkListener.INSTANCE.hyperlinkUpdate(it) }
+    }
+
+    override fun getScrollableTracksViewportWidth(): Boolean {
+        if (scrollable) {
+            return true
+        }
+        return super.getScrollableTracksViewportWidth()
     }
 
     override fun getSelectedText(): String {

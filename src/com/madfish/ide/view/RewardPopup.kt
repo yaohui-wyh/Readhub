@@ -24,6 +24,7 @@ class RewardPopup {
             val point = Point((r.width - image.iconWidth) / 2, (r.height - image.iconHeight) / 2)
             val location = if (window != null) RelativePoint(window, point) else RelativePoint(point)
             JBPopupFactory.getInstance().createComponentPopupBuilder(panel, panel)
+                    .setTitle("WeChat QR Code")
                     .setRequestFocus(true)
                     .setFocusable(true)
                     .setResizable(false)

@@ -1,11 +1,17 @@
 package com.madfish.ide.internal
 
+import com.intellij.openapi.diagnostic.Logger
+
 /**
  * Created by Roger™
  */
 object RHDebug {
 
-    val isInternal: Boolean = System.getProperty("readhub.is.internal")?.toBoolean() ?: false
+    val isInternal: Boolean = System.getProperty("readhub.internal")?.toBoolean() ?: false
+}
 
-    val customUseAgent: String = System.getProperty("readhub.httpHeader.userAgent")?.toString().orEmpty()
+fun Logger.d(message: String, t: Throwable? = null) {
+    if (RHDebug.isInternal) {
+        this.warn("[Readhub] $message", t)
+    }
 }

@@ -30,7 +30,12 @@ class RHNewsWindowContent(project: Project, category: RHCategory) : RHToolWindow
             }
             val label = HyperlinkLabel(labelText, UIUtil.getLabelForeground(), UIUtil.getLabelBackground(), UIUtil.getLabelForeground())
             label.font = JBUI.Fonts.smallFont()
-            label.addHyperlinkListener { item.url.let { url -> BrowserUtil.browse(url.trim()) } }
+            label.addHyperlinkListener {
+                val url = item.url.trim()
+                if (url.isNotBlank()) {
+                    BrowserUtil.browse(url.trim())
+                }
+            }
             itemPanel.add(label)
             itemPanel.background = background
             parent.add(itemPanel)

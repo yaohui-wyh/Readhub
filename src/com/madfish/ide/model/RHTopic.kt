@@ -13,6 +13,8 @@ class RHTopic(
         var summary: String = "",
         var newsArray: List<RHTopicNewsItem> = listOf(),
         var wechatArray: List<Any> = listOf(),
+        var timeline: String = "",
+        var extra: RHTopicExtra = RHTopicExtra(),
         var weiboArray: List<Any> = listOf()) : RHBaseItem() {
 
     override fun getSummaryText() = summary
@@ -38,3 +40,5 @@ class RHTopicNewsItem(
         var siteName: String = "",
         var title: String = "",
         var url: String? = "")
+
+class RHTopicExtra(var instantView: Boolean = false)

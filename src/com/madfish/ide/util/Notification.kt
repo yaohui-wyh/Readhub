@@ -11,7 +11,11 @@ import com.intellij.openapi.project.Project
 class Notification {
 
     companion object {
-        private val NOTIFICATION_TOOLWINDOW_GROUP = NotificationGroup.toolWindowGroup(Constants.PLUGIN_NAME, Constants.TOOL_WINDOW_NAME, false)
+        private val NOTIFICATION_TOOLWINDOW_GROUP = NotificationGroup.toolWindowGroup(
+                Constants.Plugins.name,
+                Constants.ToolWindows.toolWindowId,
+                false
+        )
 
         fun successBalloon(project: Project?, content: String, listener: NotificationListener? = null, title: String = "") {
             NOTIFICATION_TOOLWINDOW_GROUP.createNotification(title, content, NotificationType.INFORMATION, listener).notify(project)

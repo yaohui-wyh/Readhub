@@ -1,6 +1,5 @@
 package com.madfish.ide.action
 
-import com.intellij.icons.AllIcons
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.DataProvider
 import com.intellij.openapi.ide.CopyPasteManager
@@ -9,6 +8,7 @@ import com.intellij.openapi.roots.ui.configuration.actions.IconWithTextAction
 import com.madfish.ide.util.Notification
 import com.madfish.ide.util.RHDataKeys
 import com.madfish.ide.util.RHUtil
+import com.madfish.ide.view.RHIcons
 import java.awt.datatransfer.StringSelection
 
 /**
@@ -17,7 +17,7 @@ import java.awt.datatransfer.StringSelection
 class RHExportAction(private val provider: DataProvider) : IconWithTextAction(
         RHUtil.message("RHExportAction.text"),
         RHUtil.message("RHExportAction.description"),
-        AllIcons.Actions.Copy
+        RHIcons.COPY
 ), DumbAware {
 
     override fun actionPerformed(e: AnActionEvent?) {

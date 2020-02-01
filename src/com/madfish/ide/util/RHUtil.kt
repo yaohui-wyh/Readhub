@@ -24,35 +24,34 @@ import java.util.*
  */
 class RHUtil {
     companion object {
-        val gson: Gson? = null
-            get() = field ?: GsonBuilder().registerTypeAdapter(LocalDateTime::class.java, JsonDeserializer<LocalDateTime> { json, _, _ ->
-                        try {
-                            LocalDateTime.parse(json.asJsonPrimitive.asString, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
-                        } catch (ex: DateTimeParseException) {
-                            ZonedDateTime.parse(json.asJsonPrimitive.asString).toLocalDateTime()
-                        }
-                    }).registerTypeAdapterFactory(object : TypeAdapterFactory {
-                        override fun <T : Any?> create(gson: Gson?, type: TypeToken<T>?): TypeAdapter<T>? {
-                            if (type?.rawType == String::class.java) {
-                                @Suppress("unchecked_cast")
-                                return object : TypeAdapter<String>() {
-                                    override fun write(writer: JsonWriter?, value: String?) {
-                                        if (value == null) {
-                                            writer?.nullValue()
-                                            return
-                                        }
-                                        writer?.value(value)
-                                    }
-
-                                    override fun read(reader: JsonReader?): String? {
-                                        if (reader?.peek() == JsonToken.NULL) {
-                                            reader.nextNull()
-                                            return ""
-                                        }
-                                        return reader?.nextString()
-                                    }
-                                } as TypeAdapter<T>
+        val gson: Gson = GsonBuilder().registerTypeAdapter(LocalDateTime::class.java, JsonDeserializer<LocalDateTime> { json, _, _ ->
+            try {
+                LocalDateTime.parse(json.asJsonPrimitive.asString, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+            } catch (ex: DateTimeParseException) {
+                ZonedDateTime.parse(json.asJsonPrimitive.asString).toLocalDateTime()
+            }
+        }).registerTypeAdapterFactory(object : TypeAdapterFactory {
+            override fun <T : Any?> create(gson: Gson?, type: TypeToken<T>?): TypeAdapter<T>? {
+                if (type?.rawType == String::class.java) {
+                    @Suppress("unchecked_cast")
+                    return object : TypeAdapter<String>() {
+                        override fun write(writer: JsonWriter?, value: String?) {
+                            if (value == null) {
+                                writer?.nullValue()
+                                return
                             }
+                            writer?.value(value)
+                        }
+
+                        override fun read(reader: JsonReader?): String? {
+                            if (reader?.peek() == JsonToken.NULL) {
+                                reader.nextNull()
+                                return ""
+                            }
+                            return reader?.nextString()
+                        }
+                    } as TypeAdapter<T>
+                }
                             return null
                         }
                     }).create()

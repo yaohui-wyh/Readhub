@@ -1,6 +1,5 @@
 package com.madfish.ide.view
 
-import com.intellij.icons.AllIcons
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.Messages
@@ -43,7 +42,7 @@ class RHConfigComponent {
         languagePanel.add(languageLabel)
         languagePanel.add(comboBox)
         comboBox.selectedItem = RHSettings.instance.lang
-        comboBox.renderer = object: ListCellRendererWrapper<LanguageItem>() {
+        comboBox.renderer = object : ListCellRendererWrapper<LanguageItem>() {
             override fun customize(list: JList<*>?, item: LanguageItem?, index: Int, selected: Boolean, hasFocus: Boolean) {
                 setText(RHUtil.message(item?.messageKey.orEmpty()))
             }
@@ -77,10 +76,10 @@ class RHConfigComponent {
         infoPanel.add(issueLabel)
 
         authorLabel.setHtmlText("${RHUtil.message("Config.connectAuthor")}: <a href=\"#author\">@Roger</a>，")
-        authorLabel.setHyperlinkTarget(Constants.AUTHOR_URL)
+        authorLabel.setHyperlinkTarget(Constants.Readhub.authorUrl)
 
         issueLabel.setHtmlText("${RHUtil.message("Config.feedback")}: <a href=\"#feedback\">Github Issue</a>")
-        issueLabel.setHyperlinkTarget(Constants.BUG_REPORTER_WEB_URL)
+        issueLabel.setHyperlinkTarget(Constants.Readhub.bugReportUrl)
 
         // ========= Extra Panel ============
         val extraPanel = JPanel(FlowLayout(FlowLayout.LEFT, 0, 5))
@@ -113,12 +112,17 @@ class RHConfigComponent {
     }
 
     fun apply() {
-        slider.getSelected()?.let { RHSettings.instance.refreshMode = it }
+        slider.getSelected()?.let {
+            if (slider.isModified()) {
+                RHSettings.instance.refreshMode = it
+                RHSettings.instance.setRefreshTimer()
+            }
+        }
         RHSettings.instance.lang = comboBox.selectedItem as LanguageItem
     }
 
     private fun setStatsLabel(): JBLabel {
-        val label = JBLabel(setStatsText(), UIUtil.ComponentStyle.SMALL)
+        val label = JBLabel(setStatsText(), UIUtil.ComponentStyle.SMALL).apply { setCopyable(true) }
         label.border = IdeBorderFactory.createEmptyBorder(0, 0, 0, 10)
         return label
     }
@@ -133,7 +137,7 @@ class RHConfigComponent {
         parent.add(label)
 
         label.setHtmlText("<a href=\"#clear\">${RHUtil.message("Config.clearStatistics")}</a>")
-        label.setIcon(AllIcons.Actions.GC)
+        label.setIcon(RHIcons.GC)
         label.font = UIUtil.getLabelFont(UIUtil.FontSize.SMALL)
         label.addHyperlinkListener {
             val response = Messages.showYesNoDialog(
@@ -158,8 +162,8 @@ class RHConfigComponent {
 
         label.setHtmlText(" <a href=\"#rate\">${RHUtil.message("Config.rate")}</a>")
         label.font = UIUtil.getLabelFont(UIUtil.FontSize.SMALL)
-        label.setIcon(AllIcons.Toolwindows.ToolWindowFavorites)
-        label.setHyperlinkTarget(Constants.PLUGIN_RATE_URL)
+        label.setIcon(RHIcons.TOOLWINDOW_FAVORITES)
+        label.setHyperlinkTarget(Constants.Readhub.rateUrl)
         return label
     }
 

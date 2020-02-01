@@ -6,6 +6,8 @@ import com.intellij.openapi.components.PersistentStateComponent
 import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
+import com.intellij.openapi.diagnostic.Logger
+import com.madfish.ide.internal.d
 import com.madfish.ide.messages.READHUB_REFRESH_TOPIC
 import com.madfish.ide.view.LanguageItem
 import com.madfish.ide.view.RefreshRanges
@@ -19,6 +21,7 @@ import java.util.concurrent.TimeUnit
 class RHSettings : PersistentStateComponent<RHSettings.State> {
     private var myState = State()
     private var task: ScheduledFuture<*>? = null
+    private val logger = Logger.getInstance(this::class.java)
 
     companion object {
         val instance: RHSettings
@@ -29,7 +32,6 @@ class RHSettings : PersistentStateComponent<RHSettings.State> {
         get() = myState.refreshMode
         set(mode) {
             myState.refreshMode = mode
-            // setRefreshTimer()
         }
 
     var lang: LanguageItem
@@ -38,24 +40,30 @@ class RHSettings : PersistentStateComponent<RHSettings.State> {
             myState.lang = lang
         }
 
+    var uuid: String
+        get() = myState.pluginId
+        set(uuid) {
+            myState.pluginId = uuid
+        }
+
     override fun getState() = myState
 
     override fun loadState(state: State) {
         myState = state
     }
 
-    fun init() {
-        // setRefreshTimer()
-    }
-
-    private fun setRefreshTimer() {
+    @Synchronized
+    fun setRefreshTimer() {
         task?.cancel(true)
         task = if (refreshMode.minutes < 0) {
             null
         } else {
             JobScheduler.getScheduler().scheduleWithFixedDelay({
                 val app = ApplicationManager.getApplication()
-                app.invokeLater { app.messageBus.syncPublisher(READHUB_REFRESH_TOPIC).refreshItems() }
+                app.invokeLater {
+                    logger.d("auto refresh triggered")
+                    app.messageBus.syncPublisher(READHUB_REFRESH_TOPIC).refreshItems()
+                }
             }, refreshMode.minutes.toLong(), refreshMode.minutes.toLong(), TimeUnit.MINUTES)
         }
     }
@@ -63,5 +71,6 @@ class RHSettings : PersistentStateComponent<RHSettings.State> {
     class State {
         var refreshMode: RefreshRanges = RefreshRanges.NONE
         var lang: LanguageItem = LanguageItem.CHINESE
+        var pluginId: String = ""
     }
 }

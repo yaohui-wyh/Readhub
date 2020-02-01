@@ -12,12 +12,12 @@ import com.madfish.ide.model.RHCategory
  * Created by Roger™
  */
 @State(name = "readhubData", storages = [(Storage("readhub/readhub-data.xml"))])
-class RHData(
-        private var myItems: MutableMap<RHCategory, MutableList<RHBaseItem>> = mutableMapOf()
-) : PersistentStateComponent<RHData.State> {
+class RHData : PersistentStateComponent<RHData.State> {
+    private var myItems: MutableMap<RHCategory, MutableList<RHBaseItem>> = mutableMapOf()
     private var myState = State()
 
     companion object {
+        private const val maxItemSize = 2000
         val instance: RHData
             get() = ServiceManager.getService(RHData::class.java)
     }
@@ -31,7 +31,6 @@ class RHData(
     fun getItems(category: RHCategory, query: String = ""): List<RHBaseItem> {
         return myItems[category]?.filter { it.containsText(query) }.orEmpty()
     }
-
 
     fun getReadStatistics(): List<RHReadStatistics> {
         return RHCategory.values().map { c ->
@@ -62,8 +61,16 @@ class RHData(
         myState.items = mutableMapOf()
     }
 
+    // Call only once, before myItems set
+    @Synchronized
+    fun reduceCachedItems() {
+        myState.items.forEach { (category, items) ->
+            myState.items[category] = items.take(maxItemSize).toMutableList()
+        }
+    }
+
     class State {
-        @MapAnnotation()
+        @MapAnnotation
         var items: MutableMap<RHCategory, MutableList<RHBaseItem>> = mutableMapOf()
     }
 }

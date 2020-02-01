@@ -29,7 +29,7 @@ import javax.swing.table.TableCellRenderer
  */
 class RHJobWindowContent(project: Project) : RHToolWindowContent(project, RHCategory.JOB) {
 
-    override fun getColumns(): Array<ColumnInfo<RHBaseItem, String>> {
+    override fun getColumns(): Array<ColumnInfo<RHBaseItem, *>> {
         val titleColumn = object : ColumnInfo<RHBaseItem, String>("职位") {
             override fun valueOf(item: RHBaseItem?) = item?.getTitleText().orEmpty()
             override fun getRenderer(item: RHBaseItem?): TableCellRenderer? = RHBaseCellRenderer(item)
@@ -117,7 +117,9 @@ class RHJobWindowContent(project: Project) : RHToolWindowContent(project, RHCate
                 container.add(panel2)
                 container.addMouseListener(object : MouseAdapter() {
                     override fun mouseClicked(e: MouseEvent?) {
-                        BrowserUtil.browse(jobItem.url)
+                        if (jobItem.url.isNotBlank()) {
+                            BrowserUtil.browse(jobItem.url.trim())
+                        }
                     }
                 })
                 parent.add(container)

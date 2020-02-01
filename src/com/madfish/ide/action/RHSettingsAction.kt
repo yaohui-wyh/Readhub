@@ -1,28 +1,21 @@
 package com.madfish.ide.action
 
-import com.intellij.icons.AllIcons
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.options.ShowSettingsUtil
-import com.intellij.openapi.project.DumbAwareAction
+import com.intellij.openapi.project.DumbAware
 import com.madfish.ide.util.Constants
 import com.madfish.ide.util.RHUtil
+import com.madfish.ide.view.RHIcons
 
 /**
  * Created by Roger™
  */
-class RHSettingsAction : DumbAwareAction(
+class RHSettingsAction : LanguageAwareAction(
         RHUtil.message("RHSettingsAction.text"),
         RHUtil.message("RHSettingsAction.description"),
-        AllIcons.General.SecondaryGroup
-) {
+        RHIcons.SECONDARY_GROUP
+), DumbAware {
     override fun actionPerformed(e: AnActionEvent?) {
-        ShowSettingsUtil.getInstance().showSettingsDialog(e?.project, Constants.PLUGIN_NAME)
-    }
-
-    override fun update(e: AnActionEvent?) {
-        e?.presentation?.let { p ->
-            p.text = RHUtil.message("RHSettingsAction.text")
-            p.description = RHUtil.message("RHSettingsAction.description")
-        }
+        ShowSettingsUtil.getInstance().showSettingsDialog(e?.project, Constants.Plugins.name)
     }
 }

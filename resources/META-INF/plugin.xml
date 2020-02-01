@@ -1,25 +1,30 @@
 <idea-plugin>
     <id>com.madfish.ide.readhub</id>
     <name>ReadHub</name>
+    <version>1.2.0</version>
     <idea-version since-build="162.0"/>
-    <vendor email="alex.yh99@gmail.com" url="https://github.com/roger-yh99">Roger</vendor>
+    <vendor email="wangyaohuicn@gmail.com" url="https://github.com/yaohui-wyh">Yaohui Wang</vendor>
 
     <description><![CDATA[
       <b>Readhub IDE 插件</b> - 每天高效浏览行业资讯<br/>
       <i>Readhub is a News Reader application mainly for Chinese articles</i>
       <ul>
           <li>在 IDE 中快捷查阅科技动态、招聘信息等资讯，有效利用日常工作碎片时间</li>
-          <li>更多介绍，请访问：<a href="https://readhub.cn">Readhub</a> | <a href="https://github.com/roger-yh99/Readhub">GitHub</a> | <a href="https://github.com/roger-yh99/Readhub/issues/new">Issues</a></li>
+          <li>更多介绍，请访问：<a href="https://github.com/yaohui-wyh/Readhub">GitHub</a> | <a href="https://github.com/yaohui-wyh/Readhub/issues/new">Issues</a> | <a href="https://readhub.cn">Readhub</a></li>
       </ul>
     ]]></description>
 
     <change-notes><![CDATA[
-      <p>1.0.2</p>
+      <p>1.2.0</p>
       <ul>
-          <li>Readhub host changes to <a>https://readhub.cn</a></li>
+          <li>处理 IntelliJ 2020.1+ 部分 API 兼容性问题 ( <i>Fix compatibility issues with IntelliJ 2020.1+</i> )</li>
+          <li>支持使用 IntelliJ IDE 全局代理 ( <i>Enable global HTTP proxy</i> )</li>
       </ul>
-      <p>1.0.1</p>
+      <p>1.1.0</p>
       <ul>
+          <li>添加快捷键引导 ( <i>Add keyboard shortcuts tooltip</i> )</li>
+          <li>支持 VIM 键位资讯浏览 <a href="https://github.com/roger-yh99/Readhub/issues/3">[Keyboard Usage Issue #3]</a> ( <i>Support full keyboard usage</i> )</li>
+          <li>支持资讯全文预览及预览提示图标 ( <i>Enable instantView of news item</i> )</li>
           <li>支持语言切换 ( <i>Enable Language switch in Plugin settings</i> )</li>
       </ul>
       <p>1.0.0</p>

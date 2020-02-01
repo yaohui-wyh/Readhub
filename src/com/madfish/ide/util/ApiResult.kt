@@ -13,5 +13,6 @@ class ApiResult<T>(
 }
 
 enum class ErrMessage(var text: String) {
-    API_NETWORK_ERROR(RHUtil.message("ErrMessage.API_NETWORK_ERROR"))
+    API_NETWORK_ERROR(RHUtil.message("ErrMessage.API_NETWORK_ERROR")),
+    INSTANT_VIEW_ERROR(RHUtil.message("ErrMessage.INSTANT_VIEW_ERROR"))
 }
