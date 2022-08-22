@@ -10,8 +10,8 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowFactory
 import com.intellij.ui.content.ContentFactory
-import com.intellij.ui.content.ContentManagerAdapter
 import com.intellij.ui.content.ContentManagerEvent
+import com.intellij.ui.content.ContentManagerListener
 import com.madfish.ide.internal.d
 import com.madfish.ide.messages.READHUB_REFRESH_TOPIC
 import com.madfish.ide.messages.READHUB_VIEW_TOPIC
@@ -32,12 +32,13 @@ data class NameContentPair(val category: RHCategory, val content: RHToolWindowCo
 class RHToolWindow : ToolWindowFactory, DumbAware {
 
     private lateinit var myToolWindow: ToolWindow
+    private lateinit var contentFactory: ContentFactory
     private val logger = Logger.getInstance(this::class.java)
-    private val contentFactory = ContentFactory.SERVICE.getInstance()
     private val myRHContents = mutableListOf<NameContentPair>()
 
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
         myToolWindow = toolWindow
+        contentFactory = toolWindow.contentManager.factory
         if (project.isOpen) {
             initRHContents(project)
             subscribeRHListener(project)
@@ -123,10 +124,10 @@ class RHToolWindow : ToolWindowFactory, DumbAware {
     }
 
     private fun addContentListener(project: Project) {
-        myToolWindow.contentManager.addContentManagerListener(object : ContentManagerAdapter() {
-            override fun selectionChanged(event: ContentManagerEvent?) {
-                if (event?.operation == ContentManagerEvent.ContentOperation.add) {
-                    val displayName = event.content?.displayName ?: return
+        myToolWindow.contentManager.addContentManagerListener(object : ContentManagerListener {
+            override fun selectionChanged(event: ContentManagerEvent) {
+                if (event.operation == ContentManagerEvent.ContentOperation.add) {
+                    val displayName = event.content.displayName ?: return
                     val selectedPair = myRHContents.find { it.category.getName() == displayName } ?: return
                     project.messageBus.syncPublisher(READHUB_REFRESH_TOPIC).refreshItems(selectedPair.category)
                 }

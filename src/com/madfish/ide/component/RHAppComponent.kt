@@ -1,29 +1,27 @@
 package com.madfish.ide.component
 
 import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.components.ApplicationComponent
+import com.intellij.openapi.components.service
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.startup.StartupActivity
 import com.madfish.ide.configurable.RHData
 import com.madfish.ide.configurable.RHSettings
-import com.madfish.ide.util.Constants
 import com.madfish.ide.util.RHApi
 import org.apache.commons.lang.RandomStringUtils
 
 /**
  * Created by Roger™
  */
-class RHAppComponent : ApplicationComponent {
-    override fun getComponentName() = Constants.Components.appName
+class RHAppComponent : StartupActivity.Background {
 
-    override fun disposeComponent() {}
-
-    override fun initComponent() {
-        val settings = RHSettings.instance
+    override fun runActivity(project: Project) {
+        val settings = service<RHSettings>()
         if (settings.uuid.isBlank()) {
             settings.uuid = RandomStringUtils.randomAlphanumeric(8)
         }
 
         ApplicationManager.getApplication().executeOnPooledThread {
-            RHData.instance.reduceCachedItems()
+            service<RHData>().reduceCachedItems()
             RHApi.refreshAll()
             settings.setRefreshTimer()
         }

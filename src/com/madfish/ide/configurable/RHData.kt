@@ -1,7 +1,7 @@
 package com.madfish.ide.configurable
 
 import com.intellij.openapi.components.PersistentStateComponent
-import com.intellij.openapi.components.ServiceManager
+import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.util.xmlb.annotations.MapAnnotation
@@ -12,14 +12,13 @@ import com.madfish.ide.model.RHCategory
  * Created by Roger™
  */
 @State(name = "readhubData", storages = [(Storage("readhub/readhub-data.xml"))])
+@Service(Service.Level.APP)
 class RHData : PersistentStateComponent<RHData.State> {
     private var myItems: MutableMap<RHCategory, MutableList<RHBaseItem>> = mutableMapOf()
     private var myState = State()
 
     companion object {
         private const val maxItemSize = 2000
-        val instance: RHData
-            get() = ServiceManager.getService(RHData::class.java)
     }
 
     override fun getState() = myState

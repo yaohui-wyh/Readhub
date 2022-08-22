@@ -5,7 +5,8 @@ import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonToken
 import com.google.gson.stream.JsonWriter
-import com.intellij.CommonBundle
+import com.intellij.AbstractBundle
+import com.intellij.openapi.components.service
 import com.madfish.ide.configurable.RHSettings
 import java.io.IOException
 import java.io.InputStream
@@ -24,7 +25,7 @@ import java.util.*
  */
 class RHUtil {
     companion object {
-        val gson: Gson = GsonBuilder().registerTypeAdapter(LocalDateTime::class.java, JsonDeserializer<LocalDateTime> { json, _, _ ->
+        val gson: Gson = GsonBuilder().registerTypeAdapter(LocalDateTime::class.java, JsonDeserializer { json, _, _ ->
             try {
                 LocalDateTime.parse(json.asJsonPrimitive.asString, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
             } catch (ex: DateTimeParseException) {
@@ -52,9 +53,9 @@ class RHUtil {
                         }
                     } as TypeAdapter<T>
                 }
-                            return null
-                        }
-                    }).create()
+                return null
+            }
+        }).create()
 
         fun getTimeDelta(time: LocalDateTime?): String {
             time?.let {
@@ -63,18 +64,18 @@ class RHUtil {
                 val hoursDelta = ChronoUnit.HOURS.between(time, now)
                 val minutesDelta = ChronoUnit.MINUTES.between(time, now)
                 return when {
-                    daysDelta > 0 -> "$daysDelta${RHUtil.message("View.delta.days")}"
-                    hoursDelta > 0 -> "$hoursDelta${RHUtil.message("View.delta.hours")}"
-                    minutesDelta > 0 -> "$minutesDelta${RHUtil.message("View.delta.minutes")}"
-                    else -> RHUtil.message("View.delta.recent")
+                    daysDelta > 0 -> "$daysDelta${message("View.delta.days")}"
+                    hoursDelta > 0 -> "$hoursDelta${message("View.delta.hours")}"
+                    minutesDelta > 0 -> "$minutesDelta${message("View.delta.minutes")}"
+                    else -> message("View.delta.recent")
                 }
             }
             return "N/A"
         }
 
         fun message(key: String, vararg params: Any): String {
-            val filename = "messages.lang-${RHSettings.instance.lang.locale}"
-            return CommonBundle.message(ResourceBundle.getBundle(filename, UTF8Control()), key, params)
+            val filename = "messages.lang-${service<RHSettings>().lang.locale}"
+            return AbstractBundle.message(ResourceBundle.getBundle(filename, UTF8Control()), key, params)
         }
     }
 

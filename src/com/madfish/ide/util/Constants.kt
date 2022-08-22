@@ -6,17 +6,7 @@ package com.madfish.ide.util
 object Constants {
 
     object Plugins {
-        const val id = "com.madfish.ide.readhub"
         const val name = "Readhub"
-    }
-
-    object ToolWindows {
-        const val toolWindowId = "Readhub"
-    }
-
-    object Components {
-        const val appName = "Readhub Application Component"
-        const val projectName = "Readhub Project Component"
     }
 
     object Readhub {

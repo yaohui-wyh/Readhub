@@ -18,7 +18,7 @@ class RewardPopup {
 
         fun show(window: Window?) {
             val panel = JPanel()
-            val image = IconLoader.getIcon("/images/reward.jpg")
+            val image = IconLoader.getIcon("/images/reward.png", this::class.java)
             panel.add(JLabel(image))
             val r = if (window != null) window.bounds else GraphicsEnvironment.getLocalGraphicsEnvironment().defaultScreenDevice.defaultConfiguration.bounds
             val point = Point((r.width - image.iconWidth) / 2, (r.height - image.iconHeight) / 2)

@@ -61,7 +61,7 @@ class InstantViewDialog(project: Project?, item: RHInstantView) : DialogWrapper(
             }
         })
         rootPanel.add(scrollPane)
-        setResizable(false)
+        isResizable = false
         init()
     }
 

@@ -22,18 +22,18 @@ class RHInstantViewAction(private val provider: DataProvider) : IconWithTextActi
         RHIcons.PREVIEW
 ), DumbAware {
 
-    override fun actionPerformed(e: AnActionEvent?) {
+    override fun actionPerformed(e: AnActionEvent) {
         RHDataKeys.tableItem.getData(provider)?.let { item ->
             if (item is RHTopic && item.extra.instantView) {
-                ProgressManager.getInstance().run(object : Task.Backgroundable(e?.project, RHUtil.message("RHInstantViewAction.progress"), false) {
+                ProgressManager.getInstance().run(object : Task.Backgroundable(e.project, RHUtil.message("RHInstantViewAction.progress"), false) {
                     override fun run(indicator: ProgressIndicator) {
                         val apiRet = RHApi.getInstantView(item.id)
                         if (apiRet.success && apiRet.result != null && !apiRet.result?.content.isNullOrBlank()) {
                             ApplicationManager.getApplication().invokeLater {
-                                InstantViewDialog(e?.project, apiRet.result!!).show()
+                                InstantViewDialog(e.project, apiRet.result!!).show()
                             }
                         } else {
-                            Notification.errorBalloon(e?.project, ErrMessage.INSTANT_VIEW_ERROR.text)
+                            Notification.errorBalloon(e.project, ErrMessage.INSTANT_VIEW_ERROR.text)
                         }
                     }
                 })
@@ -41,8 +41,8 @@ class RHInstantViewAction(private val provider: DataProvider) : IconWithTextActi
         }
     }
 
-    override fun update(e: AnActionEvent?) {
-        e?.presentation?.let { p ->
+    override fun update(e: AnActionEvent) {
+        e.presentation.let { p ->
             p.text = RHUtil.message("RHInstantViewAction.text")
             p.description = RHUtil.message("RHInstantViewAction.description")
             p.isEnabledAndVisible = false

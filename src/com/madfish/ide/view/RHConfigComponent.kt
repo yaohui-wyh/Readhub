@@ -1,13 +1,15 @@
 package com.madfish.ide.view
 
 import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.components.service
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.wm.WindowManager
 import com.intellij.ui.HyperlinkLabel
 import com.intellij.ui.IdeBorderFactory
-import com.intellij.ui.ListCellRendererWrapper
+import com.intellij.ui.SimpleListCellRenderer
 import com.intellij.ui.components.JBLabel
+import com.intellij.util.ui.JBUI
 import com.intellij.util.ui.UIUtil
 import com.madfish.ide.configurable.RHData
 import com.madfish.ide.configurable.RHSettings
@@ -28,7 +30,7 @@ class RHConfigComponent {
 
     val mainPanel = JPanel()
     private val slider = RefreshRangeSlider(RefreshRanges.values())
-    private val comboBox = ComboBox<LanguageItem>(LanguageItem.values())
+    private val comboBox = ComboBox(LanguageItem.values())
     private var statsLabel = setStatsLabel()
 
     init {
@@ -38,19 +40,19 @@ class RHConfigComponent {
 
         val languagePanel = JPanel(FlowLayout(FlowLayout.LEFT, 0, 5))
         val languageLabel = JBLabel(RHUtil.message("Config.language"))
-        languageLabel.border = IdeBorderFactory.createEmptyBorder(0, 0, 0, 15)
+        languageLabel.border = JBUI.Borders.empty(0, 0, 0, 15)
         languagePanel.add(languageLabel)
         languagePanel.add(comboBox)
-        comboBox.selectedItem = RHSettings.instance.lang
-        comboBox.renderer = object : ListCellRendererWrapper<LanguageItem>() {
-            override fun customize(list: JList<*>?, item: LanguageItem?, index: Int, selected: Boolean, hasFocus: Boolean) {
-                setText(RHUtil.message(item?.messageKey.orEmpty()))
+        comboBox.selectedItem = service<RHSettings>().lang
+        comboBox.renderer = object : SimpleListCellRenderer<LanguageItem>() {
+            override fun customize(list: JList<out LanguageItem>, item: LanguageItem?, index: Int, selected: Boolean, hasFocus: Boolean) {
+                text = RHUtil.message(item?.messageKey.orEmpty())
             }
         }
 
         val refreshPanel = JPanel(FlowLayout(FlowLayout.LEFT, 0, 5))
         val refreshLabel = JBLabel(RHUtil.message("Config.autoRefresh"))
-        refreshLabel.border = IdeBorderFactory.createEmptyBorder(0, 0, 0, 15)
+        refreshLabel.border = JBUI.Borders.empty(0, 0, 0, 15)
         refreshPanel.add(refreshLabel)
         refreshPanel.add(slider)
 
@@ -85,12 +87,12 @@ class RHConfigComponent {
         val extraPanel = JPanel(FlowLayout(FlowLayout.LEFT, 0, 5))
 
         val label1 = JBLabel(RHUtil.message("Config.feedbackText1"), UIUtil.ComponentStyle.SMALL, UIUtil.FontColor.BRIGHTER)
-        label1.border = IdeBorderFactory.createEmptyBorder(0, 0, 0, 8)
+        label1.border = JBUI.Borders.empty(0, 0, 0, 8)
         extraPanel.add(label1)
         setRateLabel(extraPanel)
 
         val label2 = JBLabel(RHUtil.message("Config.feedbackText2"), UIUtil.ComponentStyle.SMALL, UIUtil.FontColor.BRIGHTER)
-        label2.border = IdeBorderFactory.createEmptyBorder(0, 0, 0, 8)
+        label2.border = JBUI.Borders.empty(0, 0, 0, 8)
         extraPanel.add(label2)
         setRewardLabel(extraPanel)
 
@@ -103,32 +105,32 @@ class RHConfigComponent {
     }
 
     fun isModified(): Boolean {
-        return slider.isModified() || comboBox.selectedItem != RHSettings.instance.lang
+        return slider.isModified() || comboBox.selectedItem != service<RHSettings>().lang
     }
 
     fun reset() {
-        slider.setSelected(RHSettings.instance.refreshMode)
-        comboBox.selectedItem = RHSettings.instance.lang
+        slider.setSelected(service<RHSettings>().refreshMode)
+        comboBox.selectedItem = service<RHSettings>().lang
     }
 
     fun apply() {
         slider.getSelected()?.let {
             if (slider.isModified()) {
-                RHSettings.instance.refreshMode = it
-                RHSettings.instance.setRefreshTimer()
+                service<RHSettings>().refreshMode = it
+                service<RHSettings>().setRefreshTimer()
             }
         }
-        RHSettings.instance.lang = comboBox.selectedItem as LanguageItem
+        service<RHSettings>().lang = comboBox.selectedItem as LanguageItem
     }
 
     private fun setStatsLabel(): JBLabel {
         val label = JBLabel(setStatsText(), UIUtil.ComponentStyle.SMALL).apply { setCopyable(true) }
-        label.border = IdeBorderFactory.createEmptyBorder(0, 0, 0, 10)
+        label.border = JBUI.Borders.empty(0, 0, 0, 10)
         return label
     }
 
     private fun setStatsText(): String {
-        val stats = RHData.instance.getReadStatistics()
+        val stats = service<RHData>().getReadStatistics()
         return "${RHUtil.message("Config.statistics")}: ${stats.joinToString(",   ") { "[${it.category.getName()}] ${it.readCount}" }}"
     }
 
@@ -148,7 +150,7 @@ class RHConfigComponent {
                     Messages.getQuestionIcon()
             )
             if (response == Messages.YES) {
-                RHData.instance.clearCache()
+                service<RHData>().clearCache()
                 ApplicationManager.getApplication().messageBus.syncPublisher(READHUB_REFRESH_TOPIC).refreshItems()
                 statsLabel.text = setStatsText()
             }
@@ -202,7 +204,7 @@ class RefreshRangeSlider(private val ranges: Array<RefreshRanges>) : JSlider(
 
     fun getSelected() = ranges.find { value == ranges.indexOf(it) }
 
-    fun isModified() = ranges[value] != RHSettings.instance.refreshMode
+    fun isModified() = ranges[value] != service<RHSettings>().refreshMode
 }
 
 enum class RefreshRanges(val minutes: Int, val messageKey: String) {

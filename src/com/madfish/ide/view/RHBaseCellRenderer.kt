@@ -1,8 +1,8 @@
 package com.madfish.ide.view
 
 import com.intellij.ui.ColoredTableCellRenderer
-import com.intellij.ui.IdeBorderFactory
 import com.intellij.ui.SimpleTextAttributes
+import com.intellij.util.ui.JBUI
 import com.intellij.util.ui.UIUtil
 import com.intellij.util.ui.table.IconTableCellRenderer
 import com.madfish.ide.model.RHBaseItem
@@ -18,7 +18,7 @@ class RHBaseCellRenderer(
         private val bold: Boolean = true
 ) : ColoredTableCellRenderer() {
 
-    override fun customizeCellRenderer(table: JTable?, value: Any?, selected: Boolean, hasFocus: Boolean, row: Int, column: Int) {
+    override fun customizeCellRenderer(table: JTable, value: Any?, selected: Boolean, hasFocus: Boolean, row: Int, column: Int) {
         ipad = Insets(0, 12, 0, 0)
         border = null
         if (item != null && item.finished) {
@@ -31,7 +31,7 @@ class RHBaseCellRenderer(
 
 class RHSmallCellRenderer : ColoredTableCellRenderer() {
 
-    override fun customizeCellRenderer(table: JTable?, value: Any?, selected: Boolean, hasFocus: Boolean, row: Int, column: Int) {
+    override fun customizeCellRenderer(table: JTable, value: Any?, selected: Boolean, hasFocus: Boolean, row: Int, column: Int) {
         ipad = Insets(0, 0, 0, 12)
         border = null
         append(value.toString(), SimpleTextAttributes(SimpleTextAttributes.STYLE_PLAIN, UIUtil.getInactiveTextColor()), 30, SwingConstants.RIGHT)
@@ -47,7 +47,7 @@ class RHIconCellRenderer : IconTableCellRenderer<Icon>() {
         component.foreground = UIUtil.getInactiveTextColor()
         (component as JLabel).text = ""
         component.horizontalAlignment = SwingConstants.RIGHT
-        component.border = IdeBorderFactory.createEmptyBorder(0, 2, 0, 12)
+        component.border = JBUI.Borders.empty(0, 2, 0, 12)
         return component
     }
 }

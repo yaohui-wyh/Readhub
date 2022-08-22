@@ -16,7 +16,7 @@ class RHWebAction(private val category: RHCategory) : LanguageAwareAction(
         RHUtil.message("RHWebAction.description"),
         RHIcons.READHUB
 ), DumbAware {
-    override fun actionPerformed(e: AnActionEvent?) {
+    override fun actionPerformed(e: AnActionEvent) {
         BrowserUtil.browse("${Constants.Readhub.webUrl}/${category.path}")
     }
 }

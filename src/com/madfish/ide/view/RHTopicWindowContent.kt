@@ -49,7 +49,7 @@ class RHTopicWindowContent(project: Project) : RHToolWindowContent(project, RHCa
         val columns = super.getColumns().toMutableList()
         columns.add(hintColumn, object : ColumnInfo<RHBaseItem, Icon>("extra") {
             override fun valueOf(item: RHBaseItem?): Icon? = if (item is RHTopic && item.extra.instantView) RHIcons.PREVIEW else null
-            override fun getRenderer(item: RHBaseItem?): TableCellRenderer? = RHIconCellRenderer()
+            override fun getRenderer(item: RHBaseItem?): TableCellRenderer = RHIconCellRenderer()
             override fun getWidth(table: JTable?) = JBUI.scale(32)
         })
         return columns.toTypedArray()

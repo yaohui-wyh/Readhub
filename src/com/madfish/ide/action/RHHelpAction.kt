@@ -17,7 +17,7 @@ class RHHelpAction : LanguageAwareAction(
         RHIcons.INTENTION_BULB
 ), DumbAware {
 
-    override fun actionPerformed(e: AnActionEvent?) {
+    override fun actionPerformed(e: AnActionEvent) {
         val text = """  Shortcuts
   ---------------------
   j -> Down
@@ -31,7 +31,7 @@ class RHHelpAction : LanguageAwareAction(
                 setUI(MultiLineTooltipUI())
             }
         }
-        val currentComponent = e?.inputEvent?.component ?: return
+        val currentComponent = e.inputEvent?.component ?: return
         JBPopupFactory.getInstance().createComponentPopupBuilder(tip, tip)
                 .setRequestFocus(true)
                 .setFocusable(true)

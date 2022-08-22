@@ -13,8 +13,8 @@ abstract class LanguageAwareAction(
         icon: Icon?
 ) : AnAction(text, description, icon) {
 
-    override fun update(e: AnActionEvent?) {
-        e?.presentation?.let { p ->
+    override fun update(e: AnActionEvent) {
+        e.presentation.let { p ->
             p.text = text
             p.description = description
         }
