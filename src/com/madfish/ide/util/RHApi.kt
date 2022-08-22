@@ -1,5 +1,6 @@
 package com.madfish.ide.util
 
+import com.intellij.openapi.components.service
 import com.intellij.openapi.diagnostic.Logger
 import com.madfish.ide.configurable.RHData
 import com.madfish.ide.internal.d
@@ -65,7 +66,7 @@ class RHApi {
         private fun refreshItems(category: RHCategory, cursor: String = "@null", pageSize: Int = 20): ApiResult<Boolean> {
             val ret = getReadhubResponse(category, cursor, pageSize)
             if (ret.success) {
-                ret.result?.data?.let { RHData.instance.appendItems(category, it) }
+                ret.result?.data?.let { service<RHData>().appendItems(category, it) }
             } else {
                 return ApiResult(errResult = ret)
             }
@@ -81,7 +82,7 @@ class RHApi {
         }
 
         fun fetchPrevItems(category: RHCategory, pageSize: Int = 20): ApiResult<Boolean> {
-            val items = RHData.instance.getItems(category)
+            val items = service<RHData>().getItems(category)
             val lastItem = items.lastOrNull()
             val cursor = when (category) {
                 RHCategory.TOPIC -> lastItem?.order?.toString() ?: "@null"
@@ -118,7 +119,7 @@ class RHApi {
                     ApiResult(false, errcode = ErrMessage.API_NETWORK_ERROR)
                 } else {
                     val res = response.body?.string().orEmpty()
-                    ApiResult(true, result = gson.fromJson<RHInstantView>(res, RHInstantView::class.java))
+                    ApiResult(true, result = gson.fromJson(res, RHInstantView::class.java))
                 }
             } catch (e: Exception) {
                 logger.d(ErrMessage.API_NETWORK_ERROR.text, e)

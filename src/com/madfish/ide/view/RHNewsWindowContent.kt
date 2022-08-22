@@ -25,7 +25,7 @@ class RHNewsWindowContent(project: Project, category: RHCategory) : RHToolWindow
         if (item is RHNews) {
             val itemPanel = JPanel(HorizontalLayout(5))
             var labelText = item.siteName
-            if (!item.authorName.isBlank()) {
+            if (item.authorName.isNotBlank()) {
                 labelText = "$labelText / ${item.authorName}"
             }
             val label = HyperlinkLabel(labelText, UIUtil.getLabelForeground(), UIUtil.getLabelBackground(), UIUtil.getLabelForeground())

@@ -14,7 +14,7 @@ class RHRefreshAction : LanguageAwareAction(
         RHUtil.message("RHRefreshAction.description"),
         RHIcons.REFRESH
 ), DumbAware {
-    override fun actionPerformed(e: AnActionEvent?) {
-        e?.project?.messageBus?.syncPublisher(READHUB_REFRESH_TOPIC)?.refreshItems(background = false)
+    override fun actionPerformed(e: AnActionEvent) {
+        e.project?.messageBus?.syncPublisher(READHUB_REFRESH_TOPIC)?.refreshItems(background = false)
     }
 }

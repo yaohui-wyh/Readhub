@@ -15,7 +15,7 @@ class RHSettingsAction : LanguageAwareAction(
         RHUtil.message("RHSettingsAction.description"),
         RHIcons.SECONDARY_GROUP
 ), DumbAware {
-    override fun actionPerformed(e: AnActionEvent?) {
-        ShowSettingsUtil.getInstance().showSettingsDialog(e?.project, Constants.Plugins.name)
+    override fun actionPerformed(e: AnActionEvent) {
+        ShowSettingsUtil.getInstance().showSettingsDialog(e.project, Constants.Plugins.name)
     }
 }

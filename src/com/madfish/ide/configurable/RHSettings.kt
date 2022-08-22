@@ -3,7 +3,7 @@ package com.madfish.ide.configurable
 import com.intellij.concurrency.JobScheduler
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.PersistentStateComponent
-import com.intellij.openapi.components.ServiceManager
+import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.State
 import com.intellij.openapi.components.Storage
 import com.intellij.openapi.diagnostic.Logger
@@ -18,15 +18,11 @@ import java.util.concurrent.TimeUnit
  * Created by Roger™
  */
 @State(name = "readhubSettings", storages = [(Storage("readhub/readhub-settings.xml"))])
+@Service(Service.Level.APP)
 class RHSettings : PersistentStateComponent<RHSettings.State> {
     private var myState = State()
     private var task: ScheduledFuture<*>? = null
     private val logger = Logger.getInstance(this::class.java)
-
-    companion object {
-        val instance: RHSettings
-            get() = ServiceManager.getService(RHSettings::class.java)
-    }
 
     var refreshMode: RefreshRanges
         get() = myState.refreshMode

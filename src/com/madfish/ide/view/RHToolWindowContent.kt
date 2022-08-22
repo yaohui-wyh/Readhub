@@ -2,6 +2,7 @@ package com.madfish.ide.view
 
 import com.intellij.ide.DataManager
 import com.intellij.openapi.actionSystem.*
+import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.SimpleToolWindowPanel
 import com.intellij.openapi.ui.VerticalFlowLayout
@@ -59,7 +60,7 @@ open class RHToolWindowContent(var project: Project, var category: RHCategory) {
 
     fun onItemClicked(name: String, obj: RHBaseItem?) {
         if (name == category.getName() && obj != null) {
-            RHData.instance.setItemAsRead(obj)
+            service<RHData>().setItemAsRead(obj)
             setSummaryPanel()
             setLinkPanel()
             updatePaginationLabel()
@@ -84,11 +85,11 @@ open class RHToolWindowContent(var project: Project, var category: RHCategory) {
     open fun getColumns(): Array<ColumnInfo<RHBaseItem, *>> {
         val titleColumn = object : ColumnInfo<RHBaseItem, String>("title") {
             override fun valueOf(item: RHBaseItem?) = item?.getTitleText().orEmpty()
-            override fun getRenderer(item: RHBaseItem?): TableCellRenderer? = RHBaseCellRenderer(item)
+            override fun getRenderer(item: RHBaseItem?): TableCellRenderer = RHBaseCellRenderer(item)
         }
         val datetimeColumn = object : ColumnInfo<RHBaseItem, String>("date") {
             override fun valueOf(item: RHBaseItem?) = RHUtil.getTimeDelta(item?.getDateTime())
-            override fun getRenderer(item: RHBaseItem?): TableCellRenderer? = RHSmallCellRenderer()
+            override fun getRenderer(item: RHBaseItem?): TableCellRenderer = RHSmallCellRenderer()
         }
         return arrayOf(titleColumn, datetimeColumn)
     }
@@ -112,7 +113,7 @@ open class RHToolWindowContent(var project: Project, var category: RHCategory) {
             }
         }
         object : DoubleClickListener() {
-            override fun onDoubleClick(event: MouseEvent?): Boolean {
+            override fun onDoubleClick(event: MouseEvent): Boolean {
                 val action = RHInstantViewAction(provider)
                 action.actionPerformed(AnActionEvent.createFromAnAction(action, event, ActionPlaces.UNKNOWN, DataManager.getInstance().getDataContext(myTable)))
                 return true
@@ -122,7 +123,7 @@ open class RHToolWindowContent(var project: Project, var category: RHCategory) {
 
     private fun updateTableContent(filterText: String = "") {
         val columns = getColumns()
-        val model = ListTableModel<RHBaseItem>(columns, RHData.instance.getItems(category, filterText))
+        val model = ListTableModel(columns, service<RHData>().getItems(category, filterText))
         myTable.setPaintBusy(false)
         myTable.setModelAndUpdateColumns(model)
         myTable.columnModel.getColumn(columns.size - 1).maxWidth = 80
@@ -137,7 +138,7 @@ open class RHToolWindowContent(var project: Project, var category: RHCategory) {
     }
 
     private fun setLinkPanel() {
-        myLinkPanel.border = IdeBorderFactory.createEmptyBorder(15, 10, 20, 10)
+        myLinkPanel.border = JBUI.Borders.empty(15, 10, 20, 10)
         myLinkPanel.removeAll()
         setLinkContent(myLinkPanel, RHDataKeys.tableItem.getData(provider))
         myLinkPanel.repaint()
@@ -191,7 +192,7 @@ open class RHToolWindowContent(var project: Project, var category: RHCategory) {
     /**
      * 左侧（上）列表面板的 Toolbar
      */
-    private fun buildTableToolbar(): JComponent? {
+    private fun buildTableToolbar(): JComponent {
         val actionGroup = DefaultActionGroup()
         actionGroup.addSeparator()
         actionGroup.add(RHRefreshAction())
@@ -204,8 +205,8 @@ open class RHToolWindowContent(var project: Project, var category: RHCategory) {
         toolbar.setTargetComponent(myTable)
 
         searchField.addDocumentListener(object : DocumentAdapter() {
-            override fun textChanged(e: DocumentEvent?) {
-                e?.let {
+            override fun textChanged(e: DocumentEvent) {
+                e.let {
                     updateTableContent(getText(e))
                     updatePaginationLabel()
                     setSummaryPanel()
@@ -274,7 +275,7 @@ open class RHToolWindowContent(var project: Project, var category: RHCategory) {
      */
     private fun buildTableComponent(): SimpleToolWindowPanel {
         val panel = SimpleToolWindowPanel(true, true)
-        panel.setToolbar(buildTableToolbar())
+        panel.toolbar = buildTableToolbar()
         panel.setContent(buildTablePane())
         return panel
     }
@@ -282,7 +283,7 @@ open class RHToolWindowContent(var project: Project, var category: RHCategory) {
     /**
      * 右侧（上）摘要面板的 Toolbar
      */
-    private fun buildSummaryToolbar(): JComponent? {
+    private fun buildSummaryToolbar(): JComponent {
         val actionGroup = DefaultActionGroup()
         actionGroup.add(RHExportAction(provider))
         actionGroup.add(RHInstantViewAction(provider))
@@ -300,7 +301,7 @@ open class RHToolWindowContent(var project: Project, var category: RHCategory) {
         val summaryPane = ScrollPaneFactory.createScrollPane(mySummaryPanel, SideBorder.TOP)
 
         val panel = SimpleToolWindowPanel(true, true)
-        panel.setToolbar(buildSummaryToolbar())
+        panel.toolbar = buildSummaryToolbar()
         panel.setContent(summaryPane)
 
         return panel

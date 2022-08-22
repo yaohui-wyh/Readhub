@@ -1,8 +1,6 @@
 <idea-plugin>
     <id>com.madfish.ide.readhub</id>
     <name>ReadHub</name>
-    <version>1.2.0</version>
-    <idea-version since-build="162.0"/>
     <vendor email="wangyaohuicn@gmail.com" url="https://github.com/yaohui-wyh">Yaohui Wang</vendor>
 
     <description><![CDATA[
@@ -15,6 +13,10 @@
     ]]></description>
 
     <change-notes><![CDATA[
+      <p>1.3.0</p>
+      <ul>
+          <li>处理 IntelliJ 2022.1+ 部分 API 兼容性问题 ( <i>Fix compatibility issues with IntelliJ 2022.1+</i> )</li>
+      </ul>
       <p>1.2.0</p>
       <ul>
           <li>处理 IntelliJ 2020.1+ 部分 API 兼容性问题 ( <i>Fix compatibility issues with IntelliJ 2020.1+</i> )</li>
@@ -42,16 +44,10 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <toolWindow id="Readhub" icon="/images/readhubToolWindow.png" anchor="bottom" factoryClass="com.madfish.ide.view.RHToolWindow"/>
-        <applicationService serviceImplementation="com.madfish.ide.configurable.RHData"/>
-        <applicationService serviceImplementation="com.madfish.ide.configurable.RHSettings"/>
         <applicationConfigurable id="Readhub.Configurable" provider="com.madfish.ide.configurable.RHConfigurableProvider"/>
+        <notificationGroup displayType="TOOL_WINDOW" id="Readhub" isLogByDefault="false" toolWindowId="Readhub"/>
+        <postStartupActivity implementation="com.madfish.ide.component.RHAppComponent" />
     </extensions>
-
-    <application-components>
-        <component>
-            <implementation-class>com.madfish.ide.component.RHAppComponent</implementation-class>
-        </component>
-    </application-components>
 
     <actions>
         <group id="Readhub.Toolbar"/>

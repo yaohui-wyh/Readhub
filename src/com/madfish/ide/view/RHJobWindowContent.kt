@@ -32,12 +32,12 @@ class RHJobWindowContent(project: Project) : RHToolWindowContent(project, RHCate
     override fun getColumns(): Array<ColumnInfo<RHBaseItem, *>> {
         val titleColumn = object : ColumnInfo<RHBaseItem, String>("职位") {
             override fun valueOf(item: RHBaseItem?) = item?.getTitleText().orEmpty()
-            override fun getRenderer(item: RHBaseItem?): TableCellRenderer? = RHBaseCellRenderer(item)
+            override fun getRenderer(item: RHBaseItem?): TableCellRenderer = RHBaseCellRenderer(item)
             override fun getWidth(table: JTable?) = JBUI.scale(120)
         }
 
         val countColumn = object : ColumnInfo<RHBaseItem, String>("职位总数") {
-            override fun valueOf(item: RHBaseItem?): String? {
+            override fun valueOf(item: RHBaseItem?): String {
                 if (item is RHJob) {
                     return item.jobCount.toString()
                 }
@@ -45,22 +45,22 @@ class RHJobWindowContent(project: Project) : RHToolWindowContent(project, RHCate
             }
 
             override fun getWidth(table: JTable?) = JBUI.scale(80)
-            override fun getRenderer(item: RHBaseItem?): TableCellRenderer? = RHBaseCellRenderer(item, false)
+            override fun getRenderer(item: RHBaseItem?): TableCellRenderer = RHBaseCellRenderer(item, false)
         }
 
         val cityColumn = object : ColumnInfo<RHBaseItem, String>("城市分布") {
-            override fun valueOf(item: RHBaseItem?): String? {
+            override fun valueOf(item: RHBaseItem?): String {
                 if (item is RHJob) {
                     return item.cities.map { "${it.key} (${it.value})" }.joinToString(", ")
                 }
                 return ""
             }
 
-            override fun getRenderer(item: RHBaseItem?): TableCellRenderer? = RHBaseCellRenderer(item, false)
+            override fun getRenderer(item: RHBaseItem?): TableCellRenderer = RHBaseCellRenderer(item, false)
         }
 
         val expColumn = object : ColumnInfo<RHBaseItem, String>("工作经验") {
-            override fun valueOf(item: RHBaseItem?): String? {
+            override fun valueOf(item: RHBaseItem?): String {
                 if (item is RHJob) {
                     return "${item.experienceLower}-${item.experienceUpper}年"
                 }
@@ -68,11 +68,11 @@ class RHJobWindowContent(project: Project) : RHToolWindowContent(project, RHCate
             }
 
             override fun getWidth(table: JTable?) = JBUI.scale(80)
-            override fun getRenderer(item: RHBaseItem?): TableCellRenderer? = RHBaseCellRenderer(item, false)
+            override fun getRenderer(item: RHBaseItem?): TableCellRenderer = RHBaseCellRenderer(item, false)
         }
 
         val salaryColumn = object : ColumnInfo<RHBaseItem, String>("薪资区间") {
-            override fun valueOf(item: RHBaseItem?): String? {
+            override fun valueOf(item: RHBaseItem?): String {
                 if (item is RHJob) {
                     return "${item.salaryLower}-${item.salaryUpper}k"
                 }
@@ -80,12 +80,12 @@ class RHJobWindowContent(project: Project) : RHToolWindowContent(project, RHCate
             }
 
             override fun getWidth(table: JTable?) = JBUI.scale(90)
-            override fun getRenderer(item: RHBaseItem?): TableCellRenderer? = RHBaseCellRenderer(item, false)
+            override fun getRenderer(item: RHBaseItem?): TableCellRenderer = RHBaseCellRenderer(item, false)
         }
 
         val datetimeColumn = object : ColumnInfo<RHBaseItem, String>("更新时间") {
             override fun valueOf(item: RHBaseItem?) = RHUtil.getTimeDelta(item?.getDateTime())
-            override fun getRenderer(item: RHBaseItem?): TableCellRenderer? = RHSmallCellRenderer()
+            override fun getRenderer(item: RHBaseItem?): TableCellRenderer = RHSmallCellRenderer()
             override fun getWidth(table: JTable?) = JBUI.scale(80)
         }
         return arrayOf(titleColumn, countColumn, cityColumn, expColumn, salaryColumn, datetimeColumn)

@@ -8,5 +8,5 @@ import com.madfish.ide.model.RHBaseItem
  */
 object RHDataKeys {
 
-    val tableItem: DataKey<RHBaseItem> = DataKey.create<RHBaseItem>("Readhub.TableItem")
+    val tableItem: DataKey<RHBaseItem> = DataKey.create("Readhub.TableItem")
 }

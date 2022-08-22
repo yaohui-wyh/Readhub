@@ -20,15 +20,15 @@ class RHExportAction(private val provider: DataProvider) : IconWithTextAction(
         RHIcons.COPY
 ), DumbAware {
 
-    override fun actionPerformed(e: AnActionEvent?) {
+    override fun actionPerformed(e: AnActionEvent) {
         RHDataKeys.tableItem.getData(provider)?.let {
             CopyPasteManager.getInstance().setContents(StringSelection("${it.getTitleText()}\n${it.getUrlText()}"))
-            Notification.successBalloon(e?.project, RHUtil.message("RHExportAction.notification"))
+            Notification.successBalloon(e.project, RHUtil.message("RHExportAction.notification"))
         }
     }
 
-    override fun update(e: AnActionEvent?) {
-        e?.presentation?.let { p ->
+    override fun update(e: AnActionEvent) {
+        e.presentation.let { p ->
             p.text = RHUtil.message("RHExportAction.text")
             p.description = RHUtil.message("RHExportAction.description")
             p.isEnabledAndVisible = false
